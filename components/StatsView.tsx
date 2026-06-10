@@ -4,7 +4,7 @@ import { Job } from "@/app/dashboard/page";
 import { Briefcase, TrendingUp, Trophy, XCircle, Clock } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from "recharts";
 
-const COLORS = ["#6b7280", "#3b82f6", "#f59e0b", "#10b981", "#ef4444"];
+const COLORS = ["#8aa8b8", "#38bdf8", "#fbbf24", "#34d399", "#f87171"];
 const STATUSES = ["wishlist", "applied", "interview", "offer", "rejected"];
 
 export default function StatsView({ jobs }: { jobs: Job[] }) {
@@ -38,12 +38,12 @@ export default function StatsView({ jobs }: { jobs: Job[] }) {
   const topCompanies = Object.entries(companyMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
   const stats = [
-    { icon: <Briefcase className="w-4 h-4 text-violet-400" />, label: "Total Applied", value: total, bg: "bg-violet-500/10", border: "border-violet-500/20" },
-    { icon: <TrendingUp className="w-4 h-4 text-blue-400" />, label: "Interviews", value: interviews, bg: "bg-blue-500/10", border: "border-blue-500/20" },
-    { icon: <Trophy className="w-4 h-4 text-green-400" />, label: "Offers", value: offers, bg: "bg-green-500/10", border: "border-green-500/20" },
-    { icon: <XCircle className="w-4 h-4 text-red-400" />, label: "Rejected", value: rejected, bg: "bg-red-500/10", border: "border-red-500/20" },
-    { icon: <Clock className="w-4 h-4 text-yellow-400" />, label: "Interview Rate", value: `${interviewRate}%`, bg: "bg-yellow-500/10", border: "border-yellow-500/20" },
-    { icon: <Trophy className="w-4 h-4 text-emerald-400" />, label: "Offer Rate", value: `${offerRate}%`, bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
+    { icon: <Briefcase className="w-4 h-4" style={{ color: "#34d399" }} />, label: "Total Applied", value: total, bg: "rgba(52,211,153,0.08)", border: "rgba(52,211,153,0.18)" },
+    { icon: <TrendingUp className="w-4 h-4" style={{ color: "#38bdf8" }} />, label: "Interviews", value: interviews, bg: "rgba(56,189,248,0.08)", border: "rgba(56,189,248,0.18)" },
+    { icon: <Trophy className="w-4 h-4" style={{ color: "#fbbf24" }} />, label: "Offers", value: offers, bg: "rgba(251,191,36,0.08)", border: "rgba(251,191,36,0.18)" },
+    { icon: <XCircle className="w-4 h-4" style={{ color: "#f87171" }} />, label: "Rejected", value: rejected, bg: "rgba(248,113,113,0.08)", border: "rgba(248,113,113,0.18)" },
+    { icon: <Clock className="w-4 h-4" style={{ color: "#fbbf24" }} />, label: "Interview Rate", value: `${interviewRate}%`, bg: "rgba(251,191,36,0.08)", border: "rgba(251,191,36,0.18)" },
+    { icon: <Trophy className="w-4 h-4" style={{ color: "#34d399" }} />, label: "Offer Rate", value: `${offerRate}%`, bg: "rgba(52,211,153,0.08)", border: "rgba(52,211,153,0.18)" },
   ];
 
   if (total === 0) {
@@ -59,10 +59,11 @@ export default function StatsView({ jobs }: { jobs: Job[] }) {
       {/* Stat cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         {stats.map((s, i) => (
-          <div key={i} className={`${s.bg} border ${s.border} rounded-xl p-4`}>
+          <div key={i} className="rounded-xl p-4"
+            style={{ background: s.bg, border: `1px solid ${s.border}` }}>
             <div className="mb-2">{s.icon}</div>
             <p className="text-xl font-bold text-white">{s.value}</p>
-            <p className="text-xs text-gray-400 mt-0.5">{s.label}</p>
+            <p className="text-xs mt-0.5" style={{ color: "#5a7a8a" }}>{s.label}</p>
           </div>
         ))}
       </div>
@@ -97,7 +98,7 @@ export default function StatsView({ jobs }: { jobs: Job[] }) {
               <XAxis dataKey="date" tick={{ fill: "#9ca3af", fontSize: 11 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: "#9ca3af", fontSize: 11 }} axisLine={false} tickLine={false} />
               <Tooltip contentStyle={{ background: "#1f2937", border: "1px solid #374151", borderRadius: "8px", color: "#fff" }} />
-              <Bar dataKey="count" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="count" fill="#34d399" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -112,8 +113,8 @@ export default function StatsView({ jobs }: { jobs: Job[] }) {
               <div key={company} className="flex items-center gap-3">
                 <span className="text-xs text-gray-500 w-4">{i + 1}</span>
                 <span className="text-sm text-gray-300 flex-1">{company}</span>
-                <div className="w-32 h-1.5 bg-gray-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-violet-500 rounded-full" style={{ width: `${(count / total) * 100}%` }} />
+                <div className="w-32 h-1.5 rounded-full overflow-hidden" style={{ background: "var(--bg-elevated)" }}>
+                  <div className="h-full rounded-full" style={{ width: `${(count / total) * 100}%`, background: "linear-gradient(90deg,#34d399,#fbbf24)" }} />
                 </div>
                 <span className="text-xs text-gray-500 w-4 text-right">{count}</span>
               </div>

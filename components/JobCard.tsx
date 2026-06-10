@@ -8,9 +8,9 @@ import { formatDistanceToNow } from "date-fns";
 import { useState } from "react";
 
 const priorityConfig = {
-  high:   { label: "High",   color: "text-red-300",    bg: "bg-red-500/10",    border: "border-red-500/20",    card: "border-l-red-500" },
-  medium: { label: "Medium", color: "text-yellow-300", bg: "bg-yellow-500/10", border: "border-yellow-500/20", card: "border-l-yellow-500" },
-  low:    { label: "Low",    color: "text-green-300",  bg: "bg-green-500/10",  border: "border-green-500/20",  card: "border-l-green-500" },
+  high:   { label: "High",   color: "#f87171", bg: "rgba(248,113,113,0.1)",  border: "rgba(248,113,113,0.2)",  accent: "#f87171" },
+  medium: { label: "Medium", color: "#fbbf24", bg: "rgba(251,191,36,0.1)",   border: "rgba(251,191,36,0.2)",   accent: "#fbbf24" },
+  low:    { label: "Low",    color: "#34d399", bg: "rgba(52,211,153,0.1)",   border: "rgba(52,211,153,0.2)",   accent: "#34d399" },
 };
 
 const NEXT_STATUS: Record<string, string> = {
@@ -38,7 +38,6 @@ interface Props {
 
 export default function JobCard({ job, onEdit, onDelete, onStatusChange }: Props) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: job.id });
-  const [showActions, setShowActions] = useState(false);
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -55,43 +54,61 @@ export default function JobCard({ job, onEdit, onDelete, onStatusChange }: Props
   return (
     <div
       ref={setNodeRef}
-      style={style}
-      className={`bg-[#0d1117] border border-[#21262d] border-l-2 ${priority.card} hover:border-[#30363d] rounded-xl overflow-hidden group transition-all duration-200 hover:shadow-lg hover:shadow-black/30 hover:-translate-y-0.5`}
+      style={{
+        ...style,
+        background: "var(--bg-surface)",
+        border: `1px solid var(--border)`,
+        borderLeft: `3px solid ${priority.accent}`,
+      }}
+      className="rounded-xl overflow-hidden group transition-all duration-200 hover:-translate-y-0.5"
+      onMouseEnter={e => {
+        (e.currentTarget as HTMLElement).style.borderColor = priority.accent;
+        (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 20px rgba(0,0,0,0.3)`;
+      }}
+      onMouseLeave={e => {
+        (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
+        (e.currentTarget as HTMLElement).style.borderLeftColor = priority.accent;
+        (e.currentTarget as HTMLElement).style.boxShadow = "none";
+      }}
     >
       <div className="p-3.5 space-y-2.5">
         {/* Top row */}
         <div className="flex items-center justify-between gap-2">
           <div {...attributes} {...listeners}
-            className="text-gray-700 hover:text-gray-400 cursor-grab active:cursor-grabbing transition-colors flex-shrink-0">
+            className="cursor-grab active:cursor-grabbing flex-shrink-0 transition-colors"
+            style={{ color: "#1e2a40" }}
+            onMouseEnter={e => (e.currentTarget.style.color = "#4a6080")}
+            onMouseLeave={e => (e.currentTarget.style.color = "#1e2a40")}>
             <GripVertical className="w-3.5 h-3.5" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-white text-sm leading-tight truncate">{job.company}</p>
           </div>
-          <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border flex-shrink-0 ${priority.bg} ${priority.color} ${priority.border}`}>
+          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full border flex-shrink-0"
+            style={{ background: priority.bg, color: priority.color, borderColor: priority.border }}>
             {priority.label}
           </span>
         </div>
 
         {/* Role */}
-        <p className="text-gray-400 text-xs leading-snug">{job.role}</p>
+        <p className="text-xs leading-snug" style={{ color: "#5a7a8a" }}>{job.role}</p>
 
         {/* Details */}
         <div className="space-y-1">
           {job.location && (
-            <div className="flex items-center gap-1.5 text-xs text-gray-600">
+            <div className="flex items-center gap-1.5 text-xs" style={{ color: "#3a5060" }}>
               <MapPin className="w-3 h-3 flex-shrink-0" />
               <span className="truncate">{job.location}</span>
             </div>
           )}
           {job.salary && (
-            <div className="flex items-center gap-1.5 text-xs text-gray-600">
+            <div className="flex items-center gap-1.5 text-xs" style={{ color: "#3a5060" }}>
               <DollarSign className="w-3 h-3 flex-shrink-0" />
               <span>{job.salary}</span>
             </div>
           )}
           {deadline && (
-            <div className={`flex items-center gap-1.5 text-xs ${isOverdue ? "text-red-400" : "text-gray-600"}`}>
+            <div className="flex items-center gap-1.5 text-xs" style={{ color: isOverdue ? "#f87171" : "#3a5060" }}>
               <Clock className="w-3 h-3 flex-shrink-0" />
               <span>{isOverdue ? "⚠ Overdue: " : "Due: "}{deadline.toLocaleDateString()}</span>
             </div>
@@ -102,7 +119,18 @@ export default function JobCard({ job, onEdit, onDelete, onStatusChange }: Props
         {canAdvance && (
           <button
             onClick={() => onStatusChange(nextStatus)}
-            className="w-full flex items-center justify-center gap-1.5 text-xs py-1.5 rounded-lg bg-white/5 hover:bg-violet-500/20 border border-white/10 hover:border-violet-500/40 text-gray-400 hover:text-violet-300 transition-all duration-200"
+            className="w-full flex items-center justify-center gap-1.5 text-xs py-1.5 rounded-lg transition-all duration-200"
+            style={{ background: "rgba(52,211,153,0.04)", border: "1px solid rgba(52,211,153,0.12)", color: "#4a7060" }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.background = "rgba(52,211,153,0.12)";
+              (e.currentTarget as HTMLElement).style.borderColor = "rgba(52,211,153,0.3)";
+              (e.currentTarget as HTMLElement).style.color = "#34d399";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.background = "rgba(52,211,153,0.04)";
+              (e.currentTarget as HTMLElement).style.borderColor = "rgba(52,211,153,0.12)";
+              (e.currentTarget as HTMLElement).style.color = "#4a7060";
+            }}
           >
             <ChevronRight className="w-3 h-3" />
             {NEXT_LABEL[job.status]}
@@ -111,23 +139,33 @@ export default function JobCard({ job, onEdit, onDelete, onStatusChange }: Props
       </div>
 
       {/* Footer */}
-      <div className="px-3.5 pb-3 flex items-center justify-between border-t border-[#21262d] pt-2">
-        <span className="text-[10px] text-gray-700">
+      <div className="px-3.5 pb-3 flex items-center justify-between pt-2"
+        style={{ borderTop: "1px solid var(--border)" }}>
+        <span className="text-[10px]" style={{ color: "#2a3a50" }}>
           {formatDistanceToNow(new Date(job.createdAt), { addSuffix: true })}
         </span>
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           {job.url && (
             <a href={job.url} target="_blank" rel="noreferrer"
-              className="p-1 hover:bg-white/10 rounded text-gray-500 hover:text-white transition-colors">
+              className="p-1 rounded transition-colors"
+              style={{ color: "#3a5060" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#3a5060")}>
               <ExternalLink className="w-3 h-3" />
             </a>
           )}
           <button onClick={() => onEdit(job)}
-            className="p-1 hover:bg-white/10 rounded text-gray-500 hover:text-blue-400 transition-colors">
+            className="p-1 rounded transition-colors"
+            style={{ color: "#3a5060" }}
+            onMouseEnter={e => (e.currentTarget.style.color = "#38bdf8")}
+            onMouseLeave={e => (e.currentTarget.style.color = "#3a5060")}>
             <Pencil className="w-3 h-3" />
           </button>
           <button onClick={() => onDelete(job.id)}
-            className="p-1 hover:bg-white/10 rounded text-gray-500 hover:text-red-400 transition-colors">
+            className="p-1 rounded transition-colors"
+            style={{ color: "#3a5060" }}
+            onMouseEnter={e => (e.currentTarget.style.color = "#f87171")}
+            onMouseLeave={e => (e.currentTarget.style.color = "#3a5060")}>
             <Trash2 className="w-3 h-3" />
           </button>
         </div>

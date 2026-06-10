@@ -104,8 +104,8 @@ export default function DashboardPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen bg-[#0a0c10]">
-        <div className="h-14 bg-[#0d1117] border-b border-[#21262d]" />
+      <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
+        <div className="h-14 border-b" style={{ background: "var(--bg-surface)", borderColor: "var(--border)" }} />
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="grid grid-cols-5 gap-4">
             {[...Array(5)].map((_, i) => (
@@ -121,9 +121,10 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0c10] text-white">
+    <div className="min-h-screen text-white" style={{ background: "var(--bg-base)" }}>
       {/* Header */}
-      <header className="border-b border-[#21262d] bg-[#0d1117]/80 backdrop-blur-xl sticky top-0 z-20">
+      <header className="sticky top-0 z-20 backdrop-blur-xl border-b"
+        style={{ background: "rgba(10,15,22,0.85)", borderColor: "var(--border)" }}>
         <div className="max-w-[1600px] mx-auto px-6 h-14 flex items-center gap-4">
           <div className="flex items-center gap-2.5 flex-shrink-0">
             <Logo size={28} />
@@ -131,47 +132,73 @@ export default function DashboardPage() {
           </div>
 
           {/* View toggle */}
-          <div className="flex gap-1 bg-[#161b22] border border-[#21262d] rounded-lg p-0.5 ml-4">
+          <div className="flex gap-1 rounded-lg p-0.5 ml-4"
+            style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)" }}>
             <button onClick={() => setView("board")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${view === "board" ? "bg-violet-600 text-white" : "text-gray-400 hover:text-white"}`}>
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all"
+              style={view === "board"
+                ? { background: "linear-gradient(135deg,#34d399,#fbbf24)", color: "#fff" }
+                : { color: "#5a7a8a" }}
+              onMouseEnter={e => { if (view !== "board") (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+              onMouseLeave={e => { if (view !== "board") (e.currentTarget as HTMLElement).style.color = "#5a7a8a"; }}>
               <LayoutDashboard className="w-3.5 h-3.5" /> Board
             </button>
             <button onClick={() => setView("stats")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${view === "stats" ? "bg-violet-600 text-white" : "text-gray-400 hover:text-white"}`}>
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all"
+              style={view === "stats"
+                ? { background: "linear-gradient(135deg,#34d399,#fbbf24)", color: "#fff" }
+                : { color: "#5a7a8a" }}
+              onMouseEnter={e => { if (view !== "stats") (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+              onMouseLeave={e => { if (view !== "stats") (e.currentTarget as HTMLElement).style.color = "#5a7a8a"; }}>
               <BarChart2 className="w-3.5 h-3.5" /> Stats
             </button>
           </div>
 
           {/* Quick stats */}
           {jobs.length > 0 && (
-            <div className="hidden lg:flex items-center gap-3 ml-4 text-xs text-gray-500">
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-blue-500" />{jobs.filter(j=>j.status==="applied").length} applied</span>
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-yellow-500" />{jobs.filter(j=>j.status==="interview").length} interview</span>
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500" />{jobs.filter(j=>j.status==="offer").length} offer</span>
+            <div className="hidden lg:flex items-center gap-3 ml-4 text-xs" style={{ color: "#3a5060" }}>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full" style={{ background: "#38bdf8" }} />
+                {jobs.filter(j => j.status === "applied").length} applied
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full" style={{ background: "#fbbf24" }} />
+                {jobs.filter(j => j.status === "interview").length} interview
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full" style={{ background: "#34d399" }} />
+                {jobs.filter(j => j.status === "offer").length} offer
+              </span>
             </div>
           )}
 
           <div className="ml-auto flex items-center gap-2">
             {jobs.length === 0 && (
               <button onClick={seedData} disabled={seeding}
-                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-gray-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors disabled:opacity-50">
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+                style={{ background: "rgba(52,211,153,0.08)", border: "1px solid rgba(52,211,153,0.2)", color: "#34d399" }}>
                 <Sparkles className="w-4 h-4" />
                 {seeding ? "Loading..." : "Sample Data"}
               </button>
             )}
             <button
               onClick={() => setShowModal(true)}
-              className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
-            >
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-white transition-all hover:scale-[1.02]"
+              style={{ background: "linear-gradient(135deg,#34d399,#fbbf24)", boxShadow: "0 2px 12px rgba(52,211,153,0.2)" }}>
               <Plus className="w-4 h-4" /> Add Job
             </button>
-            <div className="w-px h-5 bg-[#30363d]" />
+            <div className="w-px h-5" style={{ background: "var(--border)" }} />
             {session?.user?.image && (
-              <img src={session.user.image} alt="avatar" className="w-7 h-7 rounded-full ring-2 ring-violet-500/50" />
+              <img src={session.user.image} alt="avatar"
+                className="w-7 h-7 rounded-full ring-2"
+                style={{ ringColor: "rgba(52,211,153,0.4)" }} />
             )}
-            <span className="text-sm text-gray-300 hidden sm:block">{session?.user?.name}</span>
+            <span className="text-sm hidden sm:block" style={{ color: "#8aa8b8" }}>{session?.user?.name}</span>
             <button onClick={() => signOut({ callbackUrl: "/login" })}
-              className="p-2 hover:bg-white/5 rounded-lg transition-colors text-gray-400 hover:text-red-400">
+              className="p-2 rounded-lg transition-colors"
+              style={{ color: "#3a5060" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#f87171")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#3a5060")}>
               <LogOut className="w-4 h-4" />
             </button>
           </div>

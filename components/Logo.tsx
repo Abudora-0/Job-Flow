@@ -1,19 +1,18 @@
 export default function Logo({ size = 28 }: { size?: number }) {
+  const id = `lg-${size}`;
   return (
-    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="32" height="32" rx="8" fill="url(#logoGrad)" />
-      <rect x="6" y="10" width="8" height="3" rx="1.5" fill="white" fillOpacity="0.9" />
-      <rect x="6" y="15" width="8" height="3" rx="1.5" fill="white" fillOpacity="0.6" />
-      <rect x="6" y="20" width="5" height="3" rx="1.5" fill="white" fillOpacity="0.3" />
-      <rect x="17" y="10" width="9" height="3" rx="1.5" fill="white" fillOpacity="0.5" />
-      <rect x="17" y="15" width="9" height="3" rx="1.5" fill="white" fillOpacity="0.9" />
-      <rect x="17" y="20" width="6" height="3" rx="1.5" fill="white" fillOpacity="0.6" />
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="logoGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#7c3aed" />
-          <stop offset="1" stopColor="#2563eb" />
+        <linearGradient id={id} x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#34d399" />
+          <stop offset="1" stopColor="#fbbf24" />
         </linearGradient>
       </defs>
+      <rect x="6" y="6" width="88" height="88" rx="22" fill={`url(#${id})`} />
+      <rect x="18" y="44" width="64" height="40" rx="8" stroke="white" strokeWidth="5.5" fill="none" strokeOpacity="0.95" />
+      <path d="M34 44V36Q34 28 42 28H58Q66 28 66 36V44" stroke="white" strokeWidth="5.5" fill="none" strokeLinecap="round" strokeOpacity="0.95" />
+      <line x1="18" y1="57" x2="82" y2="57" stroke="white" strokeWidth="3" strokeOpacity="0.35" />
+      <path d="M50 76V58M43 65L50 58L57 65" stroke="white" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" strokeOpacity="0.85" />
     </svg>
   );
 }

@@ -53,17 +53,21 @@ export default function JobModal({ job, onSave, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 backdrop-blur-sm" style={{ background: "rgba(0,0,0,0.7)" }} onClick={onClose} />
       <div className="relative glass rounded-2xl w-full max-w-lg animate-slide-in max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[#21262d]">
+        <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: "var(--border)" }}>
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-violet-500/20 border border-violet-500/30 flex items-center justify-center">
-              <Briefcase className="w-4 h-4 text-violet-400" />
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center"
+              style={{ background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.25)" }}>
+              <Briefcase className="w-4 h-4" style={{ color: "#34d399" }} />
             </div>
             <h2 className="font-semibold text-white">{isEdit ? "Edit Application" : "Add Application"}</h2>
           </div>
-          <button onClick={onClose} className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-gray-400 hover:text-white">
+          <button onClick={onClose} className="p-1.5 rounded-lg transition-colors"
+            style={{ color: "#5a7a8a" }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)"; (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "#5a7a8a"; }}>
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -143,11 +147,15 @@ export default function JobModal({ job, onSave, onClose }: Props) {
           {/* Actions */}
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-2.5 border border-[#30363d] text-gray-400 hover:text-white hover:border-gray-500 rounded-xl text-sm font-medium transition-colors">
+              className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors"
+              style={{ border: "1px solid var(--border)", color: "#5a7a8a" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#34d399"; (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--border)"; (e.currentTarget as HTMLElement).style.color = "#5a7a8a"; }}>
               Cancel
             </button>
             <button type="submit"
-              className="flex-1 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-medium transition-colors">
+              className="flex-1 py-2.5 text-white rounded-xl text-sm font-medium transition-all hover:scale-[1.01]"
+              style={{ background: "linear-gradient(135deg,#34d399,#fbbf24)", boxShadow: "0 2px 12px rgba(52,211,153,0.2)" }}>
               {isEdit ? "Save Changes" : "Add Application"}
             </button>
           </div>

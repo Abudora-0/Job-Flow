@@ -10,11 +10,11 @@ import DroppableColumn from "./DroppableColumn";
 import Confetti from "./Confetti";
 
 const COLUMNS = [
-  { id: "wishlist",  label: "Wishlist",  icon: <Bookmark className="w-3.5 h-3.5" />,      color: "text-gray-300",   bg: "bg-[#161b22]",     border: "border-[#30363d]",     count: "bg-gray-500/20 text-gray-300" },
-  { id: "applied",   label: "Applied",   icon: <Send className="w-3.5 h-3.5" />,           color: "text-blue-300",   bg: "bg-blue-950/40",   border: "border-blue-500/30",   count: "bg-blue-500/20 text-blue-300" },
-  { id: "interview", label: "Interview", icon: <MessageSquare className="w-3.5 h-3.5" />,  color: "text-yellow-300", bg: "bg-yellow-950/40", border: "border-yellow-500/30", count: "bg-yellow-500/20 text-yellow-300" },
-  { id: "offer",     label: "Offer",     icon: <Trophy className="w-3.5 h-3.5" />,         color: "text-green-300",  bg: "bg-green-950/40",  border: "border-green-500/30",  count: "bg-green-500/20 text-green-300" },
-  { id: "rejected",  label: "Rejected",  icon: <XCircle className="w-3.5 h-3.5" />,        color: "text-red-300",    bg: "bg-red-950/40",    border: "border-red-500/30",    count: "bg-red-500/20 text-red-300" },
+  { id: "wishlist",  label: "Wishlist",  icon: <Bookmark className="w-3.5 h-3.5" />,     colStyle: { color: "#8aa8b8", bg: "rgba(24,32,48,0.6)",       border: "rgba(30,42,64,0.8)" },  countStyle: { bg: "rgba(138,168,184,0.12)", color: "#8aa8b8" } },
+  { id: "applied",   label: "Applied",   icon: <Send className="w-3.5 h-3.5" />,          colStyle: { color: "#38bdf8", bg: "rgba(14,40,70,0.4)",        border: "rgba(56,189,248,0.25)" }, countStyle: { bg: "rgba(56,189,248,0.15)", color: "#38bdf8" } },
+  { id: "interview", label: "Interview", icon: <MessageSquare className="w-3.5 h-3.5" />, colStyle: { color: "#fbbf24", bg: "rgba(40,30,8,0.4)",         border: "rgba(251,191,36,0.25)" }, countStyle: { bg: "rgba(251,191,36,0.15)", color: "#fbbf24" } },
+  { id: "offer",     label: "Offer",     icon: <Trophy className="w-3.5 h-3.5" />,        colStyle: { color: "#34d399", bg: "rgba(8,40,28,0.4)",         border: "rgba(52,211,153,0.25)" }, countStyle: { bg: "rgba(52,211,153,0.15)", color: "#34d399" } },
+  { id: "rejected",  label: "Rejected",  icon: <XCircle className="w-3.5 h-3.5" />,       colStyle: { color: "#f87171", bg: "rgba(40,10,10,0.4)",        border: "rgba(248,113,113,0.25)" }, countStyle: { bg: "rgba(248,113,113,0.15)", color: "#f87171" } },
 ];
 
 interface Props {
@@ -88,15 +88,21 @@ export default function KanbanBoard({ jobs, onUpdate, onDelete, onEdit, onAdd }:
       {/* Search + Filter bar */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#3a5060" }} />
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search company or role..."
-            className="w-full bg-[#161b22] border border-[#21262d] rounded-xl pl-9 pr-9 py-2 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:border-violet-500 transition-colors"
+            className="w-full rounded-xl pl-9 pr-9 py-2 text-sm text-white placeholder:text-gray-600 focus:outline-none transition-colors"
+            style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)" }}
+            onFocus={e => (e.currentTarget.style.borderColor = "#34d399")}
+            onBlur={e => (e.currentTarget.style.borderColor = "var(--border)")}
           />
           {search && (
-            <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white">
+            <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
+              style={{ color: "#3a5060" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#3a5060")}>
               <X className="w-3.5 h-3.5" />
             </button>
           )}
@@ -105,16 +111,25 @@ export default function KanbanBoard({ jobs, onUpdate, onDelete, onEdit, onAdd }:
         <div className="relative">
           <button
             onClick={() => setShowFilter(!showFilter)}
-            className={`flex items-center gap-2 px-3 py-2 border rounded-xl text-sm transition-colors ${priorityFilter !== "all" ? "bg-violet-500/20 border-violet-500/40 text-violet-300" : "bg-[#161b22] border-[#21262d] text-gray-400 hover:text-white"}`}
+            className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors"
+            style={priorityFilter !== "all"
+              ? { background: "rgba(52,211,153,0.12)", border: "1px solid rgba(52,211,153,0.3)", color: "#34d399" }
+              : { background: "var(--bg-elevated)", border: "1px solid var(--border)", color: "#5a7a8a" }}
           >
             <Filter className="w-4 h-4" />
             {priorityFilter === "all" ? "Filter" : `${priorityFilter} priority`}
           </button>
           {showFilter && (
-            <div className="absolute top-full mt-1 right-0 bg-[#161b22] border border-[#30363d] rounded-xl p-1 z-10 shadow-xl min-w-[140px]">
+            <div className="absolute top-full mt-1 right-0 rounded-xl p-1 z-10 shadow-xl min-w-[140px]"
+              style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)" }}>
               {["all", "high", "medium", "low"].map(p => (
                 <button key={p} onClick={() => { setPriorityFilter(p); setShowFilter(false); }}
-                  className={`w-full text-left px-3 py-1.5 rounded-lg text-sm transition-colors ${priorityFilter === p ? "bg-violet-500/20 text-violet-300" : "text-gray-400 hover:text-white hover:bg-white/5"}`}>
+                  className="w-full text-left px-3 py-1.5 rounded-lg text-sm transition-colors"
+                  style={priorityFilter === p
+                    ? { background: "rgba(52,211,153,0.12)", color: "#34d399" }
+                    : { color: "#5a7a8a" }}
+                  onMouseEnter={e => { if (priorityFilter !== p) { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)"; (e.currentTarget as HTMLElement).style.color = "#fff"; } }}
+                  onMouseLeave={e => { if (priorityFilter !== p) { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "#5a7a8a"; } }}>
                   {p === "all" ? "All priorities" : `${p.charAt(0).toUpperCase() + p.slice(1)} priority`}
                 </button>
               ))}
@@ -123,7 +138,7 @@ export default function KanbanBoard({ jobs, onUpdate, onDelete, onEdit, onAdd }:
         </div>
 
         {isFiltering && (
-          <span className="text-xs text-gray-500">{totalFiltered} result{totalFiltered !== 1 ? "s" : ""}</span>
+          <span className="text-xs" style={{ color: "#3a5060" }}>{totalFiltered} result{totalFiltered !== 1 ? "s" : ""}</span>
         )}
       </div>
 
@@ -138,16 +153,19 @@ export default function KanbanBoard({ jobs, onUpdate, onDelete, onEdit, onAdd }:
               <DroppableColumn key={col.id} id={col.id}>
                 <div className="space-y-2">
                   {/* Column header */}
-                  <div className={`flex items-center justify-between px-3 py-2.5 rounded-xl border ${col.bg} ${col.border}`}>
+                  <div className="flex items-center justify-between px-3 py-2.5 rounded-xl"
+                    style={{ background: col.colStyle.bg, border: `1px solid ${col.colStyle.border}` }}>
                     <div className="flex items-center gap-2">
-                      <span className={col.color}>{col.icon}</span>
-                      <span className={`text-sm font-semibold ${col.color}`}>{col.label}</span>
-                      <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${col.count}`}>
+                      <span style={{ color: col.colStyle.color }}>{col.icon}</span>
+                      <span className="text-sm font-semibold" style={{ color: col.colStyle.color }}>{col.label}</span>
+                      <span className="text-xs px-2 py-0.5 rounded-full font-semibold"
+                        style={{ background: col.countStyle.bg, color: col.countStyle.color }}>
                         {totalInCol}
                       </span>
                     </div>
                     <button onClick={() => onAdd(col.id)}
-                      className={`${col.color} hover:opacity-70 transition-opacity`}>
+                      className="transition-opacity hover:opacity-70"
+                      style={{ color: col.colStyle.color }}>
                       <Plus className="w-4 h-4" />
                     </button>
                   </div>
@@ -169,9 +187,12 @@ export default function KanbanBoard({ jobs, onUpdate, onDelete, onEdit, onAdd }:
 
                       {colJobs.length === 0 && (
                         <div onClick={() => onAdd(col.id)}
-                          className={`border-2 border-dashed rounded-xl p-5 text-center transition-all cursor-pointer group ${col.border} hover:bg-white/5`}>
-                          <div className={`flex justify-center mb-1 opacity-30 ${col.color}`}>{col.icon}</div>
-                          <p className={`text-xs ${col.color} opacity-50 group-hover:opacity-80 transition-opacity`}>
+                          className="rounded-xl p-5 text-center transition-all cursor-pointer"
+                          style={{ border: `2px dashed ${col.colStyle.border}` }}
+                          onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.03)")}
+                          onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
+                          <div className="flex justify-center mb-1 opacity-30" style={{ color: col.colStyle.color }}>{col.icon}</div>
+                          <p className="text-xs opacity-50 transition-opacity" style={{ color: col.colStyle.color }}>
                             {col.id === "wishlist" ? "Add jobs you want" :
                              col.id === "applied" ? "Track applications" :
                              col.id === "interview" ? "Log interviews" :
