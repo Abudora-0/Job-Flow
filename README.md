@@ -1,5 +1,7 @@
 # JobFlow
 
+**Live Demo:** [job-flow-jade.vercel.app](https://job-flow-jade.vercel.app)
+
 A Kanban-style job application tracker. Drag and drop your applications through every stage of the hiring pipeline — from wishlist to offer — with deadline tracking, priority flags, and a statistics dashboard.
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js&logoColor=white)
