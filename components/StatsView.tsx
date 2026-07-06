@@ -1,11 +1,19 @@
 "use client";
 
 import { Job } from "@/app/dashboard/page";
-import { Briefcase, TrendingUp, Trophy, XCircle, Clock } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from "recharts";
 
-const COLORS = ["#8aa8b8", "#38bdf8", "#fbbf24", "#34d399", "#f87171"];
+const COLORS = ["#7a6f5c", "#3a5a7d", "#a06d24", "#3e6b4f", "#b3402e"];
 const STATUSES = ["wishlist", "applied", "interview", "offer", "rejected"];
+
+const tooltipStyle = {
+  background: "#faf6eb",
+  border: "1px solid #d6c9ab",
+  borderRadius: "2px",
+  color: "#2c2417",
+  fontFamily: "var(--font-type), 'Courier Prime', monospace",
+  fontSize: 12,
+};
 
 export default function StatsView({ jobs }: { jobs: Job[] }) {
   const total = jobs.length;
@@ -38,52 +46,52 @@ export default function StatsView({ jobs }: { jobs: Job[] }) {
   const topCompanies = Object.entries(companyMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
   const stats = [
-    { icon: <Briefcase className="w-4 h-4" style={{ color: "#34d399" }} />, label: "Total Applied", value: total, bg: "rgba(52,211,153,0.08)", border: "rgba(52,211,153,0.18)" },
-    { icon: <TrendingUp className="w-4 h-4" style={{ color: "#38bdf8" }} />, label: "Interviews", value: interviews, bg: "rgba(56,189,248,0.08)", border: "rgba(56,189,248,0.18)" },
-    { icon: <Trophy className="w-4 h-4" style={{ color: "#fbbf24" }} />, label: "Offers", value: offers, bg: "rgba(251,191,36,0.08)", border: "rgba(251,191,36,0.18)" },
-    { icon: <XCircle className="w-4 h-4" style={{ color: "#f87171" }} />, label: "Rejected", value: rejected, bg: "rgba(248,113,113,0.08)", border: "rgba(248,113,113,0.18)" },
-    { icon: <Clock className="w-4 h-4" style={{ color: "#fbbf24" }} />, label: "Interview Rate", value: `${interviewRate}%`, bg: "rgba(251,191,36,0.08)", border: "rgba(251,191,36,0.18)" },
-    { icon: <Trophy className="w-4 h-4" style={{ color: "#34d399" }} />, label: "Offer Rate", value: `${offerRate}%`, bg: "rgba(52,211,153,0.08)", border: "rgba(52,211,153,0.18)" },
+    { label: "Cases filed",    value: total,              color: "var(--ink)" },
+    { label: "Interviews",     value: interviews,         color: "var(--amber)" },
+    { label: "Offers",         value: offers,             color: "var(--green)" },
+    { label: "Rejections",     value: rejected,           color: "var(--stamp-red)" },
+    { label: "Interview rate", value: `${interviewRate}%`, color: "var(--ink-blue)" },
+    { label: "Offer rate",     value: `${offerRate}%`,     color: "var(--green)" },
   ];
 
   if (total === 0) {
     return (
-      <div className="flex items-center justify-center h-64 text-gray-500 text-sm">
-        No applications yet. Add some jobs to see stats!
+      <div className="flex items-center justify-center h-64">
+        <p className="type text-[13px]" style={{ color: "var(--ink-faint)" }}>
+          — Empty docket. File some applications to see stats. —
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Stat cards */}
+    <div className="space-y-5 animate-fade-in">
+      {/* Tally cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         {stats.map((s, i) => (
-          <div key={i} className="rounded-xl p-4"
-            style={{ background: s.bg, border: `1px solid ${s.border}` }}>
-            <div className="mb-2">{s.icon}</div>
-            <p className="text-xl font-bold text-white">{s.value}</p>
-            <p className="text-xs mt-0.5" style={{ color: "#5a7a8a" }}>{s.label}</p>
+          <div key={i} className="paper-card p-4">
+            <p className="type text-[26px] font-bold leading-none" style={{ color: s.color }}>{s.value}</p>
+            <p className="type-label mt-2" style={{ color: "var(--ink-faint)" }}>{s.label}</p>
           </div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Pie chart */}
-        <div className="glass rounded-2xl p-6">
-          <h3 className="font-semibold text-sm mb-4">Applications by Status</h3>
+        <div className="paper-card p-6">
+          <h3 className="type-label card-rule pb-2 mb-4">Pipeline by status</h3>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" paddingAngle={3}>
-                {pieData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                {pieData.map((entry, i) => <Cell key={i} fill={entry.color} stroke="var(--paper)" />)}
               </Pie>
-              <Tooltip contentStyle={{ background: "#1f2937", border: "1px solid #374151", borderRadius: "8px", color: "#fff" }} />
+              <Tooltip contentStyle={tooltipStyle} />
             </PieChart>
           </ResponsiveContainer>
-          <div className="flex flex-wrap gap-2 mt-2">
+          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3">
             {pieData.map((d, i) => (
-              <span key={i} className="flex items-center gap-1.5 text-xs text-gray-300">
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }} />
+              <span key={i} className="type flex items-center gap-1.5 text-[11px]" style={{ color: "var(--ink-soft)" }}>
+                <span className="w-2 h-2 inline-block" style={{ backgroundColor: d.color }} />
                 {d.name} ({d.value})
               </span>
             ))}
@@ -91,14 +99,14 @@ export default function StatsView({ jobs }: { jobs: Job[] }) {
         </div>
 
         {/* Timeline */}
-        <div className="glass rounded-2xl p-6">
-          <h3 className="font-semibold text-sm mb-4">Applications Over Time</h3>
+        <div className="paper-card p-6">
+          <h3 className="type-label card-rule pb-2 mb-4">Applications over time</h3>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={timelineData}>
-              <XAxis dataKey="date" tick={{ fill: "#9ca3af", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: "#9ca3af", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={{ background: "#1f2937", border: "1px solid #374151", borderRadius: "8px", color: "#fff" }} />
-              <Bar dataKey="count" fill="#34d399" radius={[4, 4, 0, 0]} />
+              <XAxis dataKey="date" tick={{ fill: "#6a5f4b", fontSize: 11, fontFamily: "monospace" }} axisLine={{ stroke: "#d6c9ab" }} tickLine={false} />
+              <YAxis tick={{ fill: "#6a5f4b", fontSize: 11, fontFamily: "monospace" }} axisLine={false} tickLine={false} />
+              <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "rgba(160,109,36,0.08)" }} />
+              <Bar dataKey="count" fill="#3a5a7d" radius={[2, 2, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -106,17 +114,19 @@ export default function StatsView({ jobs }: { jobs: Job[] }) {
 
       {/* Top companies */}
       {topCompanies.length > 0 && (
-        <div className="glass rounded-2xl p-6">
-          <h3 className="font-semibold text-sm mb-4">Companies Applied To</h3>
-          <div className="space-y-2">
+        <div className="paper-card p-6">
+          <h3 className="type-label card-rule pb-2 mb-4">Companies on file</h3>
+          <div className="space-y-2.5">
             {topCompanies.map(([company, count], i) => (
               <div key={company} className="flex items-center gap-3">
-                <span className="text-xs text-gray-500 w-4">{i + 1}</span>
-                <span className="text-sm text-gray-300 flex-1">{company}</span>
-                <div className="w-32 h-1.5 rounded-full overflow-hidden" style={{ background: "var(--bg-elevated)" }}>
-                  <div className="h-full rounded-full" style={{ width: `${(count / total) * 100}%`, background: "linear-gradient(90deg,#34d399,#fbbf24)" }} />
+                <span className="type text-[11px] font-bold w-5" style={{ color: "var(--stamp-red)" }}>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="text-[13.5px] font-medium flex-1" style={{ color: "var(--ink)" }}>{company}</span>
+                <div className="w-36 h-2 overflow-hidden" style={{ background: "var(--paper-aged)", border: "1px solid var(--card-edge)" }}>
+                  <div className="h-full" style={{ width: `${(count / total) * 100}%`, background: "var(--ink-blue)" }} />
                 </div>
-                <span className="text-xs text-gray-500 w-4 text-right">{count}</span>
+                <span className="type text-[11px] w-5 text-right" style={{ color: "var(--ink-faint)" }}>{count}</span>
               </div>
             ))}
           </div>

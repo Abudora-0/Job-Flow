@@ -3,7 +3,7 @@
 import { useSession, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, Plus, LayoutDashboard, BarChart2, Sparkles } from "lucide-react";
+import { LogOut, Plus, Sparkles } from "lucide-react";
 import Logo from "@/components/Logo";
 import KanbanBoard from "@/components/KanbanBoard";
 import StatsView from "@/components/StatsView";
@@ -104,14 +104,14 @@ export default function DashboardPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-        <div className="h-14 border-b" style={{ background: "var(--bg-surface)", borderColor: "var(--border)" }} />
+      <div className="min-h-screen" style={{ background: "var(--desk)" }}>
+        <div className="h-14" style={{ background: "var(--paper)", borderBottom: "1px solid var(--card-edge)" }} />
         <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="grid grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="space-y-3">
-                <div className="skeleton h-8 rounded-xl" />
-                {[...Array(2)].map((_, j) => <div key={j} className="skeleton h-28 rounded-xl" />)}
+                <div className="skeleton h-9" />
+                {[...Array(2)].map((_, j) => <div key={j} className="skeleton h-28" />)}
               </div>
             ))}
           </div>
@@ -120,92 +120,80 @@ export default function DashboardPage() {
     );
   }
 
+  const counts = {
+    applied:   jobs.filter(j => j.status === "applied").length,
+    interview: jobs.filter(j => j.status === "interview").length,
+    offer:     jobs.filter(j => j.status === "offer").length,
+  };
+
   return (
-    <div className="min-h-screen text-white" style={{ background: "var(--bg-base)" }}>
-      {/* Header */}
-      <header className="sticky top-0 z-20 backdrop-blur-xl border-b"
-        style={{ background: "rgba(10,15,22,0.85)", borderColor: "var(--border)" }}>
-        <div className="max-w-[1600px] mx-auto px-6 h-14 flex items-center gap-4">
+    <div className="min-h-screen relative" style={{ background: "var(--desk)" }}>
+      {/* Desk-top header */}
+      <header className="sticky top-0 z-20"
+        style={{ background: "var(--paper)", borderBottom: "1px solid var(--card-edge)", boxShadow: "0 1px 3px rgba(70,55,25,0.08)" }}>
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center gap-4">
           <div className="flex items-center gap-2.5 flex-shrink-0">
-            <Logo size={28} />
-            <span className="font-bold text-white">JobFlow</span>
+            <Logo size={30} />
+            <div className="hidden sm:block">
+              <span className="type font-bold text-[16px] leading-none tracking-tight">JobFlow</span>
+              <p className="type-label leading-none mt-0.5" style={{ color: "var(--ink-faint)", fontSize: 8.5 }}>
+                Application dossier
+              </p>
+            </div>
           </div>
 
-          {/* View toggle */}
-          <div className="flex gap-1 rounded-lg p-0.5 ml-4"
-            style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)" }}>
-            <button onClick={() => setView("board")}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all"
-              style={view === "board"
-                ? { background: "linear-gradient(135deg,#34d399,#fbbf24)", color: "#fff" }
-                : { color: "#5a7a8a" }}
-              onMouseEnter={e => { if (view !== "board") (e.currentTarget as HTMLElement).style.color = "#fff"; }}
-              onMouseLeave={e => { if (view !== "board") (e.currentTarget as HTMLElement).style.color = "#5a7a8a"; }}>
-              <LayoutDashboard className="w-3.5 h-3.5" /> Board
-            </button>
-            <button onClick={() => setView("stats")}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all"
-              style={view === "stats"
-                ? { background: "linear-gradient(135deg,#34d399,#fbbf24)", color: "#fff" }
-                : { color: "#5a7a8a" }}
-              onMouseEnter={e => { if (view !== "stats") (e.currentTarget as HTMLElement).style.color = "#fff"; }}
-              onMouseLeave={e => { if (view !== "stats") (e.currentTarget as HTMLElement).style.color = "#5a7a8a"; }}>
-              <BarChart2 className="w-3.5 h-3.5" /> Stats
-            </button>
+          {/* View toggle — file tabs */}
+          <div className="flex items-end gap-1 ml-2 self-end">
+            {(["board", "stats"] as View[]).map(v => (
+              <button key={v} onClick={() => setView(v)}
+                className="type-label px-4 pt-2 pb-2.5 transition-colors cursor-pointer"
+                style={view === v
+                  ? { background: "var(--manila)", border: "1px solid var(--manila-deep)", borderBottom: "none", borderRadius: "6px 10px 0 0", color: "var(--ink)" }
+                  : { color: "var(--ink-faint)", border: "1px solid transparent" }}>
+                {v === "board" ? "The Desk" : "Case Stats"}
+              </button>
+            ))}
           </div>
 
-          {/* Quick stats */}
+          {/* Quick tallies */}
           {jobs.length > 0 && (
-            <div className="hidden lg:flex items-center gap-3 ml-4 text-xs" style={{ color: "#3a5060" }}>
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full" style={{ background: "#38bdf8" }} />
-                {jobs.filter(j => j.status === "applied").length} applied
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full" style={{ background: "#fbbf24" }} />
-                {jobs.filter(j => j.status === "interview").length} interview
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full" style={{ background: "#34d399" }} />
-                {jobs.filter(j => j.status === "offer").length} offer
-              </span>
+            <div className="hidden lg:flex items-center gap-4 ml-4">
+              <span className="type text-[11px]" style={{ color: "var(--ink-blue)" }}>{counts.applied} applied</span>
+              <span className="type text-[11px]" style={{ color: "var(--amber)" }}>{counts.interview} interview</span>
+              <span className="type text-[11px]" style={{ color: "var(--green)" }}>{counts.offer} offer</span>
             </div>
           )}
 
           <div className="ml-auto flex items-center gap-2">
             {jobs.length === 0 && (
-              <button onClick={seedData} disabled={seeding}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
-                style={{ background: "rgba(52,211,153,0.08)", border: "1px solid rgba(52,211,153,0.2)", color: "#34d399" }}>
-                <Sparkles className="w-4 h-4" />
-                {seeding ? "Loading..." : "Sample Data"}
+              <button onClick={seedData} disabled={seeding} className="ghost-btn">
+                <Sparkles className="w-3.5 h-3.5" />
+                {seeding ? "Filing…" : "Sample data"}
               </button>
             )}
-            <button
-              onClick={() => setShowModal(true)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-white transition-all hover:scale-[1.02]"
-              style={{ background: "linear-gradient(135deg,#34d399,#fbbf24)", boxShadow: "0 2px 12px rgba(52,211,153,0.2)" }}>
-              <Plus className="w-4 h-4" /> Add Job
+            <button onClick={() => setShowModal(true)} className="ink-btn">
+              <Plus className="w-3.5 h-3.5" /> File new
             </button>
-            <div className="w-px h-5" style={{ background: "var(--border)" }} />
+            <div className="w-px h-5 mx-1" style={{ background: "var(--card-edge)" }} />
             {session?.user?.image && (
               <img src={session.user.image} alt="avatar"
-                className="w-7 h-7 rounded-full ring-2"
-                style={{ ringColor: "rgba(52,211,153,0.4)" }} />
+                className="w-7 h-7 rounded-full"
+                style={{ border: "1.5px solid var(--card-edge)" }} />
             )}
-            <span className="text-sm hidden sm:block" style={{ color: "#8aa8b8" }}>{session?.user?.name}</span>
+            <span className="type text-[12px] hidden sm:block" style={{ color: "var(--ink-soft)" }}>{session?.user?.name}</span>
             <button onClick={() => signOut({ callbackUrl: "/login" })}
-              className="p-2 rounded-lg transition-colors"
-              style={{ color: "#3a5060" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "#f87171")}
-              onMouseLeave={e => (e.currentTarget.style.color = "#3a5060")}>
+              className="p-2 transition-colors cursor-pointer"
+              style={{ color: "var(--ink-faint)" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "var(--stamp-red)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "var(--ink-faint)")}
+              title="Sign out">
               <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-[1600px] mx-auto px-6 py-6">
+      <main className="relative z-10 max-w-[1600px] mx-auto px-4 sm:px-6 py-6">
         {view === "board" ? (
           <KanbanBoard
             jobs={jobs}

@@ -1,20 +1,25 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Work_Sans, Courier_Prime } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 
-const inter = Inter({ subsets: ["latin"] });
+const workSans = Work_Sans({ subsets: ["latin"], variable: "--font-body" });
+const courierPrime = Courier_Prime({
+  subsets: ["latin"],
+  variable: "--font-type",
+  weight: ["400", "700"],
+});
 
 export const metadata: Metadata = {
-  title: "JobFlow — Job Application Tracker",
-  description: "Track your job applications with a beautiful Kanban board",
+  title: "JobFlow — Application Dossier",
+  description: "Track your job hunt like a case file: a paper Kanban desk with deadlines, priorities and stats.",
   icons: { icon: "/favicon.svg" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={`${workSans.variable} ${courierPrime.variable}`}>
+      <body className={workSans.className}>
         <Providers>{children}</Providers>
       </body>
     </html>

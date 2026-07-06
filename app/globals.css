@@ -2,29 +2,192 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ────────────────────────────────────────────────
+   JOBFLOW — the paper dossier desk
+   cream desk · manila folders · index cards ·
+   typewriter labels · rubber stamps
+   ──────────────────────────────────────────────── */
+
 :root {
-  --bg-base:      #060a0e;
-  --bg-surface:   #0a0f16;
-  --bg-elevated:  #0f1620;
-  --border:       #182030;
-  --border-muted: #1e2a40;
-  --emerald:      #34d399;
-  --amber:        #fbbf24;
-  --sky:          #38bdf8;
+  --desk:        #e9e1cf;
+  --desk-deep:   #ded4bd;
+  --paper:       #faf6eb;
+  --paper-aged:  #f3edda;
+  --manila:      #eadfc0;
+  --manila-deep: #e0d2a9;
+  --card-edge:   #d6c9ab;
+  --hairline:    #cfc2a3;
+
+  --ink:         #2c2417;
+  --ink-soft:    #6a5f4b;
+  --ink-faint:   #9b9078;
+
+  --pencil:      #7a6f5c;
+  --ink-blue:    #3a5a7d;
+  --amber:       #a06d24;
+  --green:       #3e6b4f;
+  --stamp-red:   #b3402e;
 }
 
 * { box-sizing: border-box; }
 
 body {
-  background: var(--bg-base);
-  color: #c8dcea;
+  background: var(--desk);
+  color: var(--ink);
   -webkit-font-smoothing: antialiased;
+  font-family: var(--font-body), "Work Sans", system-ui, sans-serif;
 }
 
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-base); }
-::-webkit-scrollbar-thumb { background: #1e3040; border-radius: 3px; }
+/* faint desk vignette */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(ellipse at 50% 30%, transparent 55%, rgba(90,72,40,0.09) 100%);
+}
 
+.type {
+  font-family: var(--font-type), "Courier Prime", "Courier New", monospace;
+}
+
+::selection { background: rgba(179,64,46,0.25); }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--card-edge); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-faint); }
+
+/* ── index card ── */
+.paper-card {
+  background: var(--paper);
+  border: 1px solid var(--card-edge);
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(70,55,25,0.14), 0 2px 6px rgba(70,55,25,0.07);
+}
+
+/* ruled top line like an index card */
+.card-rule {
+  border-bottom: 1.5px solid rgba(179,64,46,0.35);
+}
+
+/* ── typewriter micro label ── */
+.type-label {
+  font-family: var(--font-type), "Courier Prime", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ── rubber stamp ── */
+.stamp {
+  font-family: var(--font-type), "Courier Prime", monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  transform: rotate(-3deg);
+  opacity: 0.85;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.stamp-big {
+  font-size: 13px;
+  padding: 3px 12px;
+  border-width: 2px;
+  transform: rotate(-6deg);
+}
+
+/* ── manila folder column ── */
+.folder-tab {
+  background: var(--manila);
+  border: 1px solid var(--manila-deep);
+  border-bottom: none;
+  border-radius: 6px 14px 0 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+.folder-body {
+  background: rgba(224,210,169,0.38);
+  border: 1px solid var(--manila-deep);
+  border-radius: 0 3px 3px 3px;
+}
+
+/* ── buttons ── */
+.ink-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-type), "Courier Prime", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 130ms, color 130ms, box-shadow 130ms;
+  white-space: nowrap;
+}
+.ink-btn:hover:not(:disabled) { background: var(--stamp-red); border-color: var(--stamp-red); color: #fff; }
+.ink-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.ghost-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-type), "Courier Prime", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--card-edge);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 130ms;
+  white-space: nowrap;
+}
+.ghost-btn:hover:not(:disabled) { color: var(--ink); border-color: var(--ink-soft); background: var(--paper); }
+.ghost-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ── form fields (typed onto paper) ── */
+.input-field {
+  width: 100%;
+  font-family: var(--font-type), "Courier Prime", monospace;
+  font-size: 13.5px;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid var(--card-edge);
+  border-radius: 0;
+  padding: 7px 2px;
+  outline: none;
+  transition: border-color 130ms;
+}
+.input-field::placeholder { color: var(--ink-faint); }
+.input-field:focus { border-color: var(--stamp-red); }
+select.input-field { cursor: pointer; }
+textarea.input-field {
+  border: 1.5px solid var(--card-edge);
+  padding: 8px 10px;
+  background: var(--paper-aged);
+}
+textarea.input-field:focus { border-color: var(--stamp-red); }
+
+/* ── animations ── */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -38,13 +201,13 @@ body {
   100% { background-position: 200% 0; }
 }
 @keyframes slideIn {
-  from { opacity: 0; transform: translateX(20px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translateY(16px) rotate(-0.5deg); }
+  to   { opacity: 1; transform: translateY(0) rotate(0); }
 }
 
 .animate-fade-in-up { animation: fadeInUp 0.4s ease both; }
 .animate-fade-in    { animation: fadeIn 0.3s ease both; }
-.animate-slide-in   { animation: slideIn 0.3s ease both; }
+.animate-slide-in   { animation: slideIn 0.3s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
 
 @keyframes confettiFall {
   0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
@@ -52,36 +215,29 @@ body {
 }
 .animate-confetti { animation: confettiFall linear both; }
 
+@keyframes stampIn {
+  0%   { transform: scale(2.2) rotate(-14deg); opacity: 0; }
+  60%  { transform: scale(0.95) rotate(-7deg); opacity: 1; }
+  100% { transform: scale(1) rotate(-8deg); opacity: 1; }
+}
+.animate-stamp { animation: stampIn 0.45s cubic-bezier(0.2, 0.8, 0.3, 1) both; }
+
 .skeleton {
-  background: linear-gradient(90deg, var(--bg-elevated) 25%, #1a2640 50%, var(--bg-elevated) 75%);
+  background: linear-gradient(90deg, var(--paper-aged) 25%, var(--manila) 50%, var(--paper-aged) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
-  border-radius: 8px;
+  border-radius: 2px;
+  border: 1px solid var(--card-edge);
 }
 
+/* legacy alias — paper panels */
 .glass {
-  background: rgba(10, 15, 22, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
+  background: var(--paper);
+  border: 1px solid var(--card-edge);
+  box-shadow: 0 1px 2px rgba(70,55,25,0.12);
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #34d399, #fbbf24);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-@layer components {
-  .input-field {
-    @apply w-full rounded-lg px-3 py-2 text-sm text-white placeholder:text-gray-600 focus:outline-none transition-colors;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-  }
-  .input-field:focus {
-    border-color: #34d399;
-  }
-}
+.gradient-text { color: var(--stamp-red); }
 
 @layer utilities {
   .line-clamp-2 {

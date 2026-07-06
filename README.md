@@ -9,9 +9,13 @@ A Kanban-style job application tracker. Drag and drop your applications through 
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-3ECF8E?logo=supabase&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-5-2D3748?logo=prisma&logoColor=white)
 
+## Design
+
+A paper dossier desk: warm cream ground, manila-folder columns with real folder tabs, applications as ruled index cards, priorities as tilted rubber stamps, Courier Prime typewriter labels — and an offer celebration styled as a priority telegram.
+
 ## Features
 
-- **Kanban Board** — drag-and-drop cards across 5 stages: Wishlist → Applied → Interview → Offer → Rejected
+- **Kanban Board** — drag-and-drop index cards across 5 folders: Wishlist → Applied → Interview → Offer → Rejected
 - **Quick Advance** — one-click button to move an application to the next stage
 - **Application Details** — company, role, location, salary, deadline, priority, notes, and applied date
 - **Priority Flags** — color-coded High / Medium / Low badges on every card

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trophy, X, Sparkles } from "lucide-react";
+import { X } from "lucide-react";
 
 interface Particle {
   id: number;
@@ -13,7 +13,8 @@ interface Particle {
   shape: "square" | "circle" | "strip";
 }
 
-const COLORS = ["#8b5cf6","#6366f1","#3b82f6","#10b981","#f59e0b","#f97316","#ec4899","#06b6d4"];
+/* paper-scrap confetti in desk-palette colors */
+const COLORS = ["#b3402e", "#3e6b4f", "#3a5a7d", "#a06d24", "#eadfc0", "#faf6eb", "#7a6f5c"];
 
 export default function Confetti({ onClose }: { onClose?: () => void }) {
   const [particles, setParticles] = useState<Particle[]>([]);
@@ -44,7 +45,7 @@ export default function Confetti({ onClose }: { onClose?: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-      {/* Confetti particles */}
+      {/* Paper scraps */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {particles.map(p => (
           <div
@@ -55,7 +56,7 @@ export default function Confetti({ onClose }: { onClose?: () => void }) {
               width: p.shape === "strip" ? p.size / 2 : p.size,
               height: p.shape === "strip" ? p.size * 3 : p.size,
               backgroundColor: p.color,
-              borderRadius: p.shape === "circle" ? "50%" : p.shape === "strip" ? "2px" : "2px",
+              borderRadius: p.shape === "circle" ? "50%" : "1px",
               animationDelay: `${p.delay}s`,
               animationDuration: `${p.duration}s`,
               opacity: 0.9,
@@ -64,39 +65,36 @@ export default function Confetti({ onClose }: { onClose?: () => void }) {
         ))}
       </div>
 
-      {/* Toast card */}
-      <div className="pointer-events-auto animate-fade-in-up relative">
-        {/* Glow */}
-        <div className="absolute inset-0 bg-green-500/20 rounded-3xl blur-xl scale-110" />
-
-        <div className="relative bg-[#0d1117] border border-green-500/30 rounded-3xl p-8 text-center shadow-2xl shadow-green-500/20 max-w-sm mx-4">
-          {/* Close button */}
+      {/* Telegram card */}
+      <div className="pointer-events-auto animate-slide-in relative max-w-sm mx-4 w-full">
+        <div className="paper-card relative p-8 text-center" style={{ boxShadow: "0 12px 40px rgba(44,36,23,0.35)" }}>
           <button onClick={handleClose}
-            className="absolute top-4 right-4 text-gray-600 hover:text-white transition-colors pointer-events-auto">
+            className="absolute top-4 right-4 transition-colors pointer-events-auto cursor-pointer"
+            style={{ color: "var(--ink-faint)" }}
+            onMouseEnter={e => (e.currentTarget.style.color = "var(--ink)")}
+            onMouseLeave={e => (e.currentTarget.style.color = "var(--ink-faint)")}>
             <X className="w-4 h-4" />
           </button>
 
-          {/* Trophy icon with glow */}
-          <div className="relative inline-flex mb-4">
-            <div className="absolute inset-0 bg-yellow-500/30 rounded-full blur-lg scale-150" />
-            <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg">
-              <Trophy className="w-8 h-8 text-white" />
-            </div>
+          <p className="type-label mb-5" style={{ color: "var(--ink-faint)" }}>
+            ─── TELEGRAM · PRIORITY ───
+          </p>
+
+          {/* the stamp */}
+          <div className="mb-5 flex justify-center">
+            <span className="stamp stamp-big animate-stamp" style={{ color: "var(--green)", fontSize: 22, padding: "6px 18px", borderWidth: 3 }}>
+              Offer received
+            </span>
           </div>
 
-          <h2 className="text-2xl font-bold text-white mb-1">You got an offer!</h2>
-          <p className="text-gray-400 text-sm mb-5">Congratulations on landing the offer. All your hard work paid off!</p>
+          <h2 className="type text-[20px] font-bold mb-2">You got the offer<span style={{ color: "var(--stamp-red)" }}>.</span></h2>
+          <p className="text-[13.5px] leading-relaxed mb-6" style={{ color: "var(--ink-soft)" }}>
+            Case advanced to final stage STOP all that filing paid off STOP
+            congratulations STOP
+          </p>
 
-          {/* Stars row */}
-          <div className="flex items-center justify-center gap-1 mb-5">
-            {[...Array(5)].map((_, i) => (
-              <Sparkles key={i} className="w-4 h-4 text-yellow-400" style={{ animationDelay: `${i * 0.1}s` }} />
-            ))}
-          </div>
-
-          <button onClick={handleClose}
-            className="pointer-events-auto w-full py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-500/30">
-            Let's go! 🚀
+          <button onClick={handleClose} className="ink-btn pointer-events-auto w-full justify-center py-3">
+            Stamp it ✓
           </button>
         </div>
       </div>
