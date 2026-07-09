@@ -1,13 +1,9 @@
 <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#34d399"/>
-      <stop offset="1" stop-color="#fbbf24"/>
-    </linearGradient>
-  </defs>
-  <rect x="6" y="6" width="88" height="88" rx="22" fill="url(#g)"/>
-  <rect x="16" y="46" width="68" height="38" rx="9" stroke="white" stroke-width="5.5" fill="none" stroke-opacity="0.95"/>
-  <path d="M33 46V38Q33 28 42 28H58Q67 28 67 38V46" stroke="white" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-opacity="0.95"/>
-  <line x1="16" y1="59" x2="84" y2="59" stroke="white" stroke-width="3" stroke-opacity="0.35"/>
-  <rect x="44" y="54" width="12" height="10" rx="3" stroke="white" stroke-width="3" fill="none" stroke-opacity="0.7"/>
+  <rect x="8" y="8" width="84" height="84" rx="22" fill="#f7f1dd"/>
+  <path d="M20 34C20 28 25 23 31 23H43L51 31H80C86 31 90 35 90 41V74C90 80 85 85 79 85H31C25 85 20 80 20 74V34Z" fill="#eadfc0" stroke="#2c2417" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M32 31V21C32 17 35 14 39 14H63C67 14 70 17 70 21V25" stroke="#2c2417" stroke-width="4" fill="#faf6eb" stroke-linejoin="round"/>
+  <rect x="48" y="48" width="28" height="18" rx="2" stroke="#b3402e" stroke-width="3.5" fill="none" transform="rotate(-6 62 57)"/>
+  <line x1="32" y1="52" x2="50" y2="52" stroke="#2c2417" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="32" y1="62" x2="46" y2="62" stroke="#6a5f4b" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="32" y1="72" x2="52" y2="72" stroke="#6a5f4b" stroke-width="3.5" stroke-linecap="round"/>
 </svg>
