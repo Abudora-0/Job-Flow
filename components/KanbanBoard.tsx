@@ -87,12 +87,12 @@ export default function KanbanBoard({ jobs, onUpdate, onDelete, onEdit, onAdd }:
       {/* Search + Filter bar */}
       <div className="flex items-center gap-4 flex-wrap">
         <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-1 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--ink-faint)" }} />
+          <Search className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--ink-faint)" }} />
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search company or role…"
-            className="input-field pl-7 pr-8"
+            className="input-field pl-8 pr-9"
             style={{ background: "transparent" }}
           />
           {search && (
